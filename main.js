@@ -63,12 +63,15 @@ Git.prototype.checkout = function (branchName) {
 };
 
 // Commit history Tests
-console.log("Git.log() Tests");
-let repo = new Git("test-repo");
-repo.commit("Initial commit");
-repo.commit("Second commit");
 
-let log = repo.log();
-console.assert(log.length === 2); // Should have two commits
-console.assert(!!log[0] && log[0].id === 1);
-console.assert(!!log[1] && log[1].id === 0);
+console.log("Git.checkout() test");
+var repo = new Git("test");
+repo.commit("Initial commit");
+
+console.assert(repo.HEAD.name === "master"); // Should be on master branch.
+repo.checkout("testing");
+console.assert(repo.HEAD.name === "testing"); // Should be on new testing branch.
+repo.checkout("master");
+console.assert(repo.HEAD.name === "master"); // Should be on master branch.
+repo.checkout("testing");
+console.assert(repo.HEAD.name === "testing"); // Should be on testing branch again.
