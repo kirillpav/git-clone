@@ -2,8 +2,10 @@
 function Git(name) {
 	this.name = name;
 	this.lastCommitId = -1;
+	this.branches = [];
 
 	let master = new Branch("master", null);
+	this.branches.push(master);
 
 	this.HEAD = master; // Ref to master branch
 }
@@ -40,6 +42,24 @@ Git.prototype.log = function () {
 	}
 
 	return history;
+};
+
+// Checkout functionality
+Git.prototype.checkout = function (branchName) {
+	for (let i = this.branches.length; i--; ) {
+		if (this.branches[i] === branchName) {
+			console.log("Switching to existing branch + " + branchName);
+			this.HEAD = this.branches[i];
+			return this;
+		}
+	}
+	// If branch not found
+	let newBranch = new Branch(branchName, this.HEAD.commit);
+	this.branches.push(newBranch);
+	this.HEAD = newBranch;
+
+	console.log("Switched to new branch: " + newBranch);
+	return this;
 };
 
 // Commit history Tests
